@@ -5,7 +5,7 @@ import time
 
 """
 cccpRaider (Python version)
--------------------------
+---------------------------
 A Streamlit-based tool that sends messages to a Discord channel using one or more user tokens at a configurable interval.
 
 **Important:**
@@ -13,10 +13,10 @@ A Streamlit-based tool that sends messages to a Discord channel using one or mor
 - For educational purposes only.
 
 Run the app:
-    $ streamlit run symraider.py
+    $ streamlit run cccp_raider.py
 """
 
-# ------------- Helper functions -------------
+# ------------ Helper functions ------------
 
 def send_message(token: str, channel_id: str, message: str, log_fn):
     """Send a single message using the Discord HTTP API."""
@@ -34,13 +34,11 @@ def send_message(token: str, channel_id: str, message: str, log_fn):
         )
         if response.ok:
             msg_id = response.json().get("id")
-            log_fn(f"[SUCCESS] Token: {token[:10]}...  ID: {msg_id}")
+            log_fn(f"[SUCCESS] Token: {token[:10]}... ID: {msg_id}")
         else:
-            log_fn(
-                f"[ERROR] Token: {token[:10]}...  Status: {response.status_code}"
-            )
+            log_fn(f"[ERROR] Token: {token[:10]}... Status: {response.status_code}")
     except Exception as e:
-        log_fn(f"[ERROR] Token: {token[:10]}...  {e}")
+        log_fn(f"[ERROR] Token: {token[:10]}... {e}")
 
 
 def spam_loop(tokens, channel_id, message, interval_ms, stop_event, log_fn):
@@ -52,11 +50,11 @@ def spam_loop(tokens, channel_id, message, interval_ms, stop_event, log_fn):
             send_message(token, channel_id, message, log_fn)
         stop_event.wait(interval_ms / 1000.0)
 
-# ------------- Streamlit UI -------------
+# ------------ Streamlit UI ------------
 
 def main():
-    st.set_page_config(page_title="SymRaider (Python)", page_icon="🐍")
-    st.title("cccpRaider ")
+    st.set_page_config(page_title="cccpRaider (Python)", page_icon="🐍")
+    st.title("cccpRaider")
 
     # Input widgets
     token_count = st.slider("Use Tokens", min_value=1, max_value=10, value=1, step=1)
@@ -66,6 +64,8 @@ def main():
         st.session_state.tokens = ["" for _ in range(token_count)]
     if len(st.session_state.tokens) < token_count:
         st.session_state.tokens.extend(["" for _ in range(token_count - len(st.session_state.tokens))])
+    elif len(st.session_state.tokens) > token_count:
+        st.session_state.tokens = st.session_state.tokens[:token_count]
 
     tokens = []
     for i in range(token_count):
@@ -73,6 +73,7 @@ def main():
             f"Token {i + 1}",
             value=st.session_state.tokens[i],
             type="password",
+            key=f"token_{i}",
         )
         tokens.append(token)
         st.session_state.tokens[i] = token
