@@ -10,23 +10,22 @@
       font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
-      background: #0f172a;
-      color: #f1f5f9;
+      background-image: url('https://cdn.discordapp.com/attachments/1378033137099214851/1380604820334973041/2_1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #fee2e2;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 2rem;
       position: relative;
-      background-image: url('ダウンロード (2) (1).jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
     }
     .discord-button {
       position: absolute;
       top: 1rem;
       right: 1rem;
-      background-color: #5865F2;
+      background-color: #ef4444;
       color: white;
       padding: 0.5rem 1rem;
       border-radius: 6px;
@@ -36,14 +35,14 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     }
     .discord-button:hover {
-      background-color: #4752c4;
+      background-color: #dc2626;
     }
     h1 {
-      color: #4ade80;
+      color: #f87171;
       margin-bottom: 1rem;
     }
     .container {
-      background-color: rgba(30, 41, 59, 0.85);
+      background-color: rgba(185, 28, 28, 0.85);
       padding: 2rem;
       border-radius: 8px;
       max-width: 500px;
@@ -64,28 +63,29 @@
       font-family: 'Inter', sans-serif;
     }
     input, textarea {
-      background: #334155;
-      color: #f8fafc;
+      background: #7f1d1d;
+      color: #fee2e2;
     }
     button {
-      background: #4ade80;
-      color: #000;
+      background: #ef4444;
+      color: #fff;
       font-weight: bold;
       margin-top: 1rem;
       cursor: pointer;
     }
     button:hover {
-      background: #22c55e;
+      background: #dc2626;
     }
     .log {
       margin-top: 1rem;
-      background: #0f172a;
+      background: #7f1d1d;
       padding: 1rem;
       font-family: monospace;
       white-space: pre-wrap;
       border-radius: 4px;
       max-height: 200px;
       overflow-y: scroll;
+      color: #fecaca;
     }
   </style>
 </head>
@@ -98,8 +98,11 @@
 
     <div id="tokenInputs"></div>
 
+    <label for="serverId">Server ID:</label>
+    <input type="text" id="serverId" placeholder="Example: 123456789012345678" />
+
     <label for="channelId">Channel ID:</label>
-    <input type="text" id="channelId" placeholder="Example: 1234567890" />
+    <input type="text" id="channelId" placeholder="Example: 123456789012345678" />
 
     <label for="message">Message:</label>
     <textarea id="message" rows="4" placeholder="Hello, world!"></textarea>
@@ -137,7 +140,7 @@
       const time = new Date().toLocaleTimeString();
       const line = document.createElement('div');
       line.textContent = `[${time}] ${message}`;
-      line.style.color = success ? '#4ade80' : '#f87171';
+      line.style.color = success ? '#facc15' : '#fecaca';
       logs.appendChild(line);
       logs.scrollTop = logs.scrollHeight;
     }
@@ -197,3 +200,4 @@
   </script>
 </body>
 </html>
+
