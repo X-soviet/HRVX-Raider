@@ -96,23 +96,17 @@
   <a href="https://discord.gg/Qqd8BVpQpq" class="discord-button" target="_blank">Join Discord</a>
   <h1>HRVXRaider</h1>
   <div class="container">
-    <label for="tokenCount">Number of Tokens:</label>
-    <input type="number" id="tokenCount" min="1" max="10" value="1" />
-
-    <div id="tokenInputs"></div>
+    <label for="tokens">Tokens (one per line):</label>
+    <textarea id="tokens" rows="5" placeholder="Token1\nToken2\nToken3..."></textarea>
 
     <label for="serverId">Server ID:</label>
     <input type="text" id="serverId" placeholder="Example: 123456789012345678" />
 
     <label for="channelId">Channel IDs (one per line):</label>
-    <textarea id="channelId" rows="3" placeholder="123...
-456...
-789..."></textarea>
+    <textarea id="channelId" rows="3" placeholder="123...\n456...\n789..."></textarea>
 
     <label for="userIds">User IDs (one per line):</label>
-    <textarea id="userIds" rows="3" placeholder="123...
-456...
-789..."></textarea>
+    <textarea id="userIds" rows="3" placeholder="123...\n456...\n789..."></textarea>
 
     <label for="message">Message:</label>
     <textarea id="message" rows="4" placeholder="Hello, world!"></textarea>
@@ -127,23 +121,7 @@
   </div>
 
   <script>
-    const tokenInputsDiv = document.getElementById('tokenInputs');
-    const tokenCountInput = document.getElementById('tokenCount');
     let sendIntervalId = null;
-
-    function updateTokenInputs() {
-      const count = parseInt(tokenCountInput.value);
-      tokenInputsDiv.innerHTML = '';
-      for (let i = 0; i < count; i++) {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.placeholder = `Token ${i + 1}`;
-        input.className = 'token-input';
-        tokenInputsDiv.appendChild(input);
-      }
-    }
-    tokenCountInput.addEventListener('input', updateTokenInputs);
-    updateTokenInputs();
 
     function log(message, success = false) {
       const logs = document.getElementById('logs');
@@ -178,7 +156,7 @@
     }
 
     function startSending() {
-      const tokens = Array.from(document.querySelectorAll('.token-input')).map(t => t.value.trim()).filter(t => t);
+      const tokens = document.getElementById('tokens').value.trim().split(/\n+/).filter(t => t);
       const channelIds = document.getElementById('channelId').value.trim().split(/\n+/).filter(x => x);
       const userIds = document.getElementById('userIds').value.trim().split(/\n+/).filter(x => x);
       const message = document.getElementById('message').value;
