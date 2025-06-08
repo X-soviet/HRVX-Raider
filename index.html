@@ -105,8 +105,8 @@
     <label for="channelId">Channel IDs (one per line):</label>
     <textarea id="channelId" rows="3" placeholder="123...\n456...\n789..."></textarea>
 
-    <label for="userIds">User IDs (one per line):</label>
-    <textarea id="userIds" rows="3" placeholder="123...\n456...\n789..."></textarea>
+    <label for="userIds">User IDs (one per line, optional):</label>
+    <textarea id="userIds" rows="3" placeholder="Optional: 123...\n456...\n789..."></textarea>
 
     <label for="message">Message:</label>
     <textarea id="message" rows="4" placeholder="Hello, world!"></textarea>
@@ -133,8 +133,8 @@
       logs.scrollTop = logs.scrollHeight;
     }
 
-    async function sendMessage(token, channelId, message, mentionId) {
-      const content = `<@${mentionId}> ` + message;
+    async function sendMessage(token, channelId, message, mentionId = null) {
+      const content = mentionId ? `<@${mentionId}> ` + message : message;
       try {
         const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
           method: 'POST',
@@ -158,12 +158,13 @@
     function startSending() {
       const tokens = document.getElementById('tokens').value.trim().split(/\n+/).filter(t => t);
       const channelIds = document.getElementById('channelId').value.trim().split(/\n+/).filter(x => x);
-      const userIds = document.getElementById('userIds').value.trim().split(/\n+/).filter(x => x);
+      const userIdsRaw = document.getElementById('userIds').value.trim();
+      const userIds = userIdsRaw ? userIdsRaw.split(/\n+/).filter(x => x) : [];
       const message = document.getElementById('message').value;
       const interval = parseInt(document.getElementById('interval').value);
 
-      if (!tokens.length || !channelIds.length || !userIds.length || !message || isNaN(interval) || interval < 100) {
-        alert('Please fill out all fields correctly.');
+      if (!tokens.length || !channelIds.length || !message || isNaN(interval) || interval < 100) {
+        alert('Please fill out all required fields.');
         return;
       }
 
@@ -174,7 +175,7 @@
       sendIntervalId = setInterval(() => {
         tokens.forEach(token => {
           const channelId = channelIds[Math.floor(Math.random() * channelIds.length)];
-          const mentionId = userIds[Math.floor(Math.random() * userIds.length)];
+          const mentionId = userIds.length ? userIds[Math.floor(Math.random() * userIds.length)] : null;
           sendMessage(token, channelId, message, mentionId);
         });
       }, interval);
