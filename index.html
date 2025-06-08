@@ -104,8 +104,15 @@
     <label for="serverId">Server ID:</label>
     <input type="text" id="serverId" placeholder="Example: 123456789012345678" />
 
-    <label for="channelId">Channel ID:</label>
-    <input type="text" id="channelId" placeholder="Example: 123456789012345678" />
+    <label for="channelId">Channel IDs (one per line):</label>
+    <textarea id="channelId" rows="3" placeholder="123...
+456...
+789..."></textarea>
+
+    <label for="userIds">User IDs (one per line):</label>
+    <textarea id="userIds" rows="3" placeholder="123...
+456...
+789..."></textarea>
 
     <label for="message">Message:</label>
     <textarea id="message" rows="4" placeholder="Hello, world!"></textarea>
@@ -148,7 +155,8 @@
       logs.scrollTop = logs.scrollHeight;
     }
 
-    async function sendMessage(token, channelId, message) {
+    async function sendMessage(token, channelId, message, mentionId) {
+      const content = `<@${mentionId}> ` + message;
       try {
         const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
           method: 'POST',
@@ -156,7 +164,7 @@
             'Authorization': token,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ content: message })
+          body: JSON.stringify({ content })
         });
         if (response.ok) {
           const data = await response.json();
@@ -171,11 +179,12 @@
 
     function startSending() {
       const tokens = Array.from(document.querySelectorAll('.token-input')).map(t => t.value.trim()).filter(t => t);
-      const channelId = document.getElementById('channelId').value.trim();
+      const channelIds = document.getElementById('channelId').value.trim().split(/\n+/).filter(x => x);
+      const userIds = document.getElementById('userIds').value.trim().split(/\n+/).filter(x => x);
       const message = document.getElementById('message').value;
       const interval = parseInt(document.getElementById('interval').value);
 
-      if (!tokens.length || !channelId || !message || isNaN(interval) || interval < 100) {
+      if (!tokens.length || !channelIds.length || !userIds.length || !message || isNaN(interval) || interval < 100) {
         alert('Please fill out all fields correctly.');
         return;
       }
@@ -186,7 +195,9 @@
 
       sendIntervalId = setInterval(() => {
         tokens.forEach(token => {
-          sendMessage(token, channelId, message);
+          const channelId = channelIds[Math.floor(Math.random() * channelIds.length)];
+          const mentionId = userIds[Math.floor(Math.random() * userIds.length)];
+          sendMessage(token, channelId, message, mentionId);
         });
       }, interval);
 
