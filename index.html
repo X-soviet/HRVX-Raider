@@ -18,14 +18,19 @@
       padding: 2rem;
       position: relative;
     }
-.discord-button {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
-}
-
-
+    .discord-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: #ef4444;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
     .discord-button:hover {
       background-color: #dc2626;
     }
@@ -59,48 +64,36 @@
       color: #f1f5f9;
       font-family: 'Inter', sans-serif;
     }
-   <style>
-<style>
-<style>
-  .top-right-menu {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    background: #1f2937;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    display: flex;
-    overflow: hidden;
-    z-index: 9999;
-  }
-
-  .top-right-menu a {
-    color: #ff0000;
-    font-weight: bold;
-    border: 2px solid #ff0000;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    display: block;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-
-  .top-right-menu a:not(:last-child) {
-    border-right: none;
-  }
-
-  .top-right-menu a:hover {
-    background-color: #ff0000;
-    color: #000000;
-  }
-</style>
-
-<div class="top-right-menu">
-  <a href="https://discord.gg/Qqd8BVpQpq" target="_blank" rel="noopener noreferrer">Discord Join</a>
-  <a href="https://x-soviet.github.io/HRVX-joiner/" target="_blank" rel="noopener noreferrer">別サイトに飛ぶ</a>
-</div>
-
-
-
+    button {
+      background: transparent;
+      border: 2px solid #ff0000;
+      color: #ff0000;
+      font-weight: bold;
+      margin-top: 1rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    button:hover {
+      background: #ff0000;
+      color: #000000;
+    }
+    .log {
+      margin-top: 1rem;
+      background: #1f2937;
+      padding: 1rem;
+      font-family: monospace;
+      white-space: pre-wrap;
+      border-radius: 4px;
+      max-height: 200px;
+      overflow-y: scroll;
+      color: #fca5a5;
+    }
+  </style>
+</head>
+<body>
+  <a href="https://discord.gg/Qqd8BVpQpq" class="discord-button" target="_blank">Join Discord</a>
   <h1>HRVXRaider</h1>
   <div class="container">
     <label for="tokens">Tokens (one per line):</label>
