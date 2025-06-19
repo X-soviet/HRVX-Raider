@@ -61,39 +61,41 @@
       font-family: 'Inter', sans-serif;
     }
    <style>
-  button {
-    background: transparent;
-    border: 2px solid #ff0000;
+<style>
+  .menu {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: #1f2937;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    display: flex;
+    overflow: hidden;
+    z-index: 1000;
+  }
+  .menu a {
     color: #ff0000;
     font-weight: bold;
-    margin-top: 1rem;
-    padding: 0.5rem;
-    border-radius: 4px;
+    border: 2px solid #ff0000;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.2s ease, color 0.2s ease;
     cursor: pointer;
-    transition: background 0.2s ease;
   }
-  button:hover {
-    background: #ff0000;
+  .menu a:not(:last-child) {
+    border-right: none;
+  }
+  .menu a:hover {
+    background-color: #ff0000;
     color: #000000;
-  }
-  .log {
-    margin-top: 1rem;
-    background: #1f2937;
-    padding: 1rem;
-    font-family: monospace;
-    white-space: pre-wrap;
-    border-radius: 4px;
-    max-height: 200px;
-    overflow-y: scroll;
-    color: #fca5a5;
   }
 </style>
 
-<body>
-  <a href="https://discord.gg/Qqd8BVpQpq" target="_blank" style="color:#ff0000; font-weight:bold; border: 2px solid #ff0000; padding: 0.5rem; border-radius: 4px; text-decoration:none; margin-right: 0.5rem; display: inline-block; transition: background 0.2s ease;" onmouseover="this.style.backgroundColor='#ff0000'; this.style.color='#000000';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#ff0000';">Discord</a>
+<div class="menu">
+  <a href="https://discord.gg/Qqd8BVpQpq" target="_blank" rel="noopener noreferrer">Discord</a>
+  <a href="https://x-soviet.github.io/HRVX-joiner
 
-  <a href="https://x-soviet.github.io/HRVX-joiner/" target="_blank" style="color:#ff0000; font-weight:bold; border: 2px solid #ff0000; padding: 0.5rem; border-radius: 4px; text-decoration:none; display: inline-block; transition: background 0.2s ease;" onmouseover="this.style.backgroundColor='#ff0000'; this.style.color='#000000';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#ff0000';">Joiner</a>
-</body>
 
   <h1>HRVXRaider</h1>
   <div class="container">
