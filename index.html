@@ -18,19 +18,19 @@
       padding: 2rem;
       position: relative;
     }
-    .discord-button {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background-color: #ef4444;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 0.9rem;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    }
+   .discord-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #5865F2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 999;
+}
+
     .discord-button:hover {
       background-color: #dc2626;
     }
@@ -94,7 +94,7 @@
 </head>
 <body>
   <a href="https://discord.gg/Qqd8BVpQpq" class="discord-button" target="_blank">Join Discord</a>
-  <a href="https://x-soviet.github.io/HRVX-joiner/" class="discord-button" target="_blank">Joiner</a>
+ <a href="https://x-soviet.github.io/HRVX-joiner/" class="discord-button" target="_blank">Joiner</a>
   <h1>HRVXRaider</h1>
   <div class="container">
     <label for="tokens">Tokens (one per line):</label>
