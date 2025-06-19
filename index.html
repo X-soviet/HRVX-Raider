@@ -60,37 +60,41 @@
       color: #f1f5f9;
       font-family: 'Inter', sans-serif;
     }
-    button {
-      background: transparent;
-      border: 2px solid #ff0000;
-      color: #ff0000;
-      font-weight: bold;
-      margin-top: 1rem;
-      padding: 0.5rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    button:hover {
-      background: #ff0000;
-      color: #000000;
-    }
-    .log {
-      margin-top: 1rem;
-      background: #1f2937;
-      padding: 1rem;
-      font-family: monospace;
-      white-space: pre-wrap;
-      border-radius: 4px;
-      max-height: 200px;
-      overflow-y: scroll;
-      color: #fca5a5;
-    }
-  </style>
-</head>
+   <style>
+  button {
+    background: transparent;
+    border: 2px solid #ff0000;
+    color: #ff0000;
+    font-weight: bold;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  button:hover {
+    background: #ff0000;
+    color: #000000;
+  }
+  .log {
+    margin-top: 1rem;
+    background: #1f2937;
+    padding: 1rem;
+    font-family: monospace;
+    white-space: pre-wrap;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: scroll;
+    color: #fca5a5;
+  }
+</style>
+
 <body>
-  <a href="https://discord.gg/Qqd8BVpQpq" class="discord-button" target="_blank">Discord</a>
- <a href="https://x-soviet.github.io/HRVX-joiner/" class="discord-button" target="_blank">Joiner</a>
+  <a href="https://discord.gg/Qqd8BVpQpq" target="_blank" style="color:#ff0000; font-weight:bold; border: 2px solid #ff0000; padding: 0.5rem; border-radius: 4px; text-decoration:none; margin-right: 0.5rem; display: inline-block; transition: background 0.2s ease;" onmouseover="this.style.backgroundColor='#ff0000'; this.style.color='#000000';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#ff0000';">Discord</a>
+
+  <a href="https://x-soviet.github.io/HRVX-joiner/" target="_blank" style="color:#ff0000; font-weight:bold; border: 2px solid #ff0000; padding: 0.5rem; border-radius: 4px; text-decoration:none; display: inline-block; transition: background 0.2s ease;" onmouseover="this.style.backgroundColor='#ff0000'; this.style.color='#000000';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#ff0000';">Joiner</a>
+</body>
+
   <h1>HRVXRaider</h1>
   <div class="container">
     <label for="tokens">Tokens (one per line):</label>
