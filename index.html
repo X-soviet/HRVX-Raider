@@ -23,7 +23,6 @@
   top: 20px;
   right: 20px;
   z-index: 9999;
-  /* 他は省略 */
 }
 
 
@@ -62,7 +61,8 @@
     }
    <style>
 <style>
-  .menu {
+<style>
+  .top-right-menu {
     position: fixed;
     top: 15px;
     right: 15px;
@@ -71,9 +71,10 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     display: flex;
     overflow: hidden;
-    z-index: 1000;
+    z-index: 9999;
   }
-  .menu a {
+
+  .top-right-menu a {
     color: #ff0000;
     font-weight: bold;
     border: 2px solid #ff0000;
@@ -81,20 +82,23 @@
     text-decoration: none;
     display: block;
     transition: background-color 0.2s ease, color 0.2s ease;
-    cursor: pointer;
   }
-  .menu a:not(:last-child) {
+
+  .top-right-menu a:not(:last-child) {
     border-right: none;
   }
-  .menu a:hover {
+
+  .top-right-menu a:hover {
     background-color: #ff0000;
     color: #000000;
   }
 </style>
 
-<div class="menu">
-  <a href="https://discord.gg/Qqd8BVpQpq" target="_blank" rel="noopener noreferrer">Discord</a>
-  <a href="https://x-soviet.github.io/HRVX-joiner
+<div class="top-right-menu">
+  <a href="https://discord.gg/Qqd8BVpQpq" target="_blank" rel="noopener noreferrer">Discord Join</a>
+  <a href="https://x-soviet.github.io/HRVX-joiner/" target="_blank" rel="noopener noreferrer">別サイトに飛ぶ</a>
+</div>
+
 
 
   <h1>HRVXRaider</h1>
