@@ -114,6 +114,10 @@
     <label for="interval">Interval (ms):</label>
     <input type="number" id="interval" min="100" value="1000" />
 
+    <label>
+      <input type="checkbox" id="randomSuffixToggle" /> Append random string
+    </label>
+
     <button onclick="startSending()">Start</button>
     <button onclick="stopSending()">Stop</button>
 
@@ -133,8 +137,19 @@
       logs.scrollTop = logs.scrollHeight;
     }
 
-    async function sendMessage(token, channelId, message, mentionId = null) {
-      const content = mentionId ? `<@${mentionId}> ` + message : message;
+    function generateRandomString(length = 8) {
+      const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    async function sendMessage(token, channelId, message, mentionId = null, appendRandom = false) {
+      const suffix = appendRandom ? generateRandomString() : '';
+      const base = mentionId ? `<@${mentionId}> ` + message : message;
+      const content = base + (suffix ? ' ' + suffix : '');
       try {
         const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
           method: 'POST',
@@ -162,6 +177,7 @@
       const userIds = userIdsRaw ? userIdsRaw.split(/\n+/).filter(x => x) : [];
       const message = document.getElementById('message').value;
       const interval = parseInt(document.getElementById('interval').value);
+      const appendRandom = document.getElementById('randomSuffixToggle').checked;
 
       if (!tokens.length || !channelIds.length || !message || isNaN(interval) || interval < 100) {
         alert('Please fill out all required fields.');
@@ -176,7 +192,7 @@
         tokens.forEach(token => {
           const channelId = channelIds[Math.floor(Math.random() * channelIds.length)];
           const mentionId = userIds.length ? userIds[Math.floor(Math.random() * userIds.length)] : null;
-          sendMessage(token, channelId, message, mentionId);
+          sendMessage(token, channelId, message, mentionId, appendRandom);
         });
       }, interval);
 
@@ -193,3 +209,4 @@
   </script>
 </body>
 </html>
+
