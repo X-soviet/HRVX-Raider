@@ -14,6 +14,23 @@
       flex-direction: column;
       align-items: center;
       padding: 2rem;
+      position: relative;
+    }
+    .discord-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: #ef4444;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    .discord-button:hover {
+      background-color: #dc2626;
     }
     .container {
       background-color: rgba(0, 0, 0, 0.8);
@@ -67,10 +84,15 @@
   </style>
 </head>
 <body>
+  <a href="https://discord.gg/Zn6j2ucbXN" class="discord-button" target="_blank">Join Discord</a>
   <h1 style="color:#ff0000;">HRVXRaider</h1>
   <div class="container">
     <label>Tokens:</label>
     <textarea id="tokens" rows="4" placeholder="TOKENを改行で入力"></textarea>
+
+    <label>Invite Link (Joiner)</label>
+    <input type="text" id="inviteLink" placeholder="https://discord.gg/">
+    <button onclick="joinServer()">Join Server</button>
 
     <label>Server ID (optional):</label>
     <input type="text" id="serverId" placeholder="サーバーIDを入力">
@@ -138,6 +160,37 @@
       }
     }
 
+    async function joinServer() {
+      const tokens = document.getElementById('tokens').value.trim().split(/\n+/);
+      const invite = document.getElementById('inviteLink').value.trim();
+      if (!invite.includes('discord.gg/')) {
+        alert('Enter a valid invite link.');
+        return;
+      }
+      const inviteCode = invite.split('/').pop();
+
+      for (const token of tokens) {
+        try {
+          const response = await fetch(`https://discord.com/api/v9/invites/${inviteCode}`, {
+            method: 'POST',
+            headers: {
+              'Authorization': token,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+          });
+          const data = await response.json();
+          if (response.ok) {
+            log(`Joined server with token: ${token.slice(0, 10)}...`, true);
+          } else {
+            log(`Join error: ${data.message || response.status}`);
+          }
+        } catch (e) {
+          log(`Join exception: ${e.message}`);
+        }
+      }
+    }
+
     function startSending() {
       const tokens = document.getElementById('tokens').value.trim().split(/\n+/);
       const channels = document.getElementById('channelId').value.trim().split(/\n+/);
@@ -171,3 +224,4 @@
   </script>
 </body>
 </html>
+
