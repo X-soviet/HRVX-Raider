@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Message Spammer</title>
+  <title>Message Spammer + Mentions</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -54,12 +54,18 @@
   </style>
 </head>
 <body>
-  <h2>📤 Message Spammer</h2>
+  <h2>📤 Message Spammer + 👥 Mentions</h2>
   <label for="tokens">Tokens (one per line)</label>
   <textarea id="tokens" rows="4"></textarea>
 
   <label for="channelId">Channel ID</label>
   <input type="text" id="channelId">
+
+  <label for="userIds">User IDs (mention targets, one per line)</label>
+  <textarea id="userIds" rows="3"></textarea>
+
+  <label for="mentionCount">Number of users to mention</label>
+  <input type="number" id="mentionCount" min="0" value="2">
 
   <label for="message">Message</label>
   <textarea id="message" rows="3"></textarea>
@@ -81,6 +87,11 @@
       entry.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
       logDiv.appendChild(entry);
       logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    function pickRandomMentions(userIds, count) {
+      const shuffled = userIds.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, count);
     }
 
     async function sendMessage(token, channelId, content) {
@@ -107,6 +118,8 @@
     function startSpam() {
       const tokens = document.getElementById('tokens').value.trim().split(/\n+/);
       const channelId = document.getElementById('channelId').value.trim();
+      const userIds = document.getElementById('userIds').value.trim().split(/\n+/).filter(x => x);
+      const mentionCount = parseInt(document.getElementById('mentionCount').value);
       const message = document.getElementById('message').value;
       const interval = parseInt(document.getElementById('interval').value);
 
@@ -117,7 +130,9 @@
 
       intervalId = setInterval(() => {
         for (const token of tokens) {
-          sendMessage(token, channelId, message);
+          const mentions = userIds.length ? pickRandomMentions([...userIds], mentionCount).map(id => `<@${id}>`).join(' ') : '';
+          const content = `${mentions} ${message}`.trim();
+          sendMessage(token, channelId, content);
         }
       }, interval);
 
@@ -134,3 +149,4 @@
   </script>
 </body>
 </html>
+
