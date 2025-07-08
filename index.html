@@ -91,7 +91,7 @@
     <textarea id="tokens" rows="4" placeholder="TOKENを改行で入力"></textarea>
 
     <label>Invite Link (Joiner)</label>
-    <input type="text" id="inviteLink" placeholder="https://discord.gg/">
+    <input type="text" id="inviteLink" placeholder="https://discord.gg/abc123">
     <button onclick="joinServer()">Join Server</button>
 
     <label>Server ID (optional):</label>
@@ -109,7 +109,10 @@
     <label>Mention count (max):</label>
     <input type="number" id="mentionCount" value="3" min="0" max="20" placeholder="メンション数を入力">
 
-    <label><input type="checkbox" id="randomSuffixToggle"> Add random string</label>
+    <label><input type=\"checkbox\" id=\"randomSuffixToggle\"> Add random string</label>
+
+    <label>Interval (ms):</label>
+    <input type=\"number\" id=\"interval\" value=\"1000\" min=\"100\" placeholder=\"送信間隔（ミリ秒）を入力\">
 
     <button onclick="startSending()">Start</button>
     <button onclick="stopSending()">Stop</button>
@@ -196,7 +199,7 @@
       const channels = document.getElementById('channelId').value.trim().split(/\n+/);
       const users = document.getElementById('userIds').value.trim().split(/\n+/).filter(x => x);
       const message = document.getElementById('message').value;
-      const interval = 1000;
+      const interval = parseInt(document.getElementById('interval').value) || 1000;
       const useRandom = document.getElementById('randomSuffixToggle').checked;
       const mentionCount = parseInt(document.getElementById('mentionCount').value);
 
@@ -224,4 +227,3 @@
   </script>
 </body>
 </html>
-
