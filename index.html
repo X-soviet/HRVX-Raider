@@ -1,248 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HRVXRaider</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #000000;
-      color: #f1f5f9;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-      position: relative;
+import streamlit as st
+import threading
+import requests
+import random
+import time
+import string
+
+def generate_random_string(length=12):
+    chars = string.ascii_letters + string.digits
+    return ''.join(random.choices(chars, k=length))
+
+def send_message(token, channel_id, base_message, mentions, use_random_only):
+    suffix = generate_random_string()
+    mention_str = ' '.join(f"<@{uid}>" for uid in mentions)
+    if use_random_only:
+        content = f"{suffix} {mention_str}".strip()
+    else:
+        content = f"{base_message} {suffix} {mention_str}".strip()
+
+    headers = {
+        "Authorization": token,
+        "Content-Type": "application/json"
     }
-    .discord-button {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background-color: #ef4444;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 0.9rem;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    }
-    .discord-button:hover {
-      background-color: #dc2626;
-    }
-    h1 {
-      color: #ff0000;
-      font-size: 3rem;
-      margin-bottom: 1.5rem;
-      font-weight: 800;
-      text-shadow: 1px 1px 2px #000;
-    }
-    .container {
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 2rem;
-      border-radius: 8px;
-      max-width: 480px;
-      width: 100%;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-    label {
-      font-weight: bold;
-      margin-top: 1rem;
-      display: block;
-    }
-    input, textarea {
-      width: 100%;
-      margin-top: 0.25rem;
-      padding: 0.5rem;
-      border-radius: 4px;
-      border: 2px solid #ff0000;
-      background-color: #000000;
-      color: #f1f5f9;
-      font-family: 'Inter', sans-serif;
-    }
-    button {
-      background: transparent;
-      border: 2px solid #ff0000;
-      color: #ff0000;
-      font-weight: bold;
-      margin-top: 1rem;
-      padding: 0.5rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    button:hover {
-      background: #ff0000;
-      color: #000000;
-    }
-    .log {
-      margin-top: 1rem;
-      background: #1f2937;
-      padding: 1rem;
-      font-family: monospace;
-      white-space: pre-wrap;
-      border-radius: 4px;
-      max-height: 200px;
-      overflow-y: scroll;
-      color: #fca5a5;
-    }
-  </style>
-</head>
-<body>
-  <a href="https://discord.gg/Qqd8BVpQpq" class="discord-button" target="_blank">Join Discord</a>
-  <h1>HRVXRaider</h1>
-  <div class="container">
-    <label for="tokens">Tokens (one per line):</label>
-    <textarea id="tokens" rows="5" placeholder="TOKENを改行で入力"></textarea>
+    payload = {"content": content}
 
-    <label for="inviteLink">Invite link (optional):</label>
-    <input type="text" id="inviteLink" placeholder="https://discord.gg/" />
-    <button onclick="joinServer()">Join Server</button>
-    
-<div style="margin-top: 0.5rem;">
-  <label for="serverId" style="margin-bottom: 0.25rem; display: block;">Server ID (optional):</label>
-  <input type="text" id="serverId" placeholder="サーバーIDを入力" style="margin-top: 0; margin-bottom: 0.25rem; padding: 0.5rem; border-radius: 4px; border: 2px solid #ff0000; background-color: #000000; color: #f1f5f9; font-family: 'Inter', sans-serif; width: 100%;" />
-</div>
+    try:
+        response = requests.post(
+            f"https://discord.com/api/v10/channels/{channel_id}/messages",
+            headers=headers,
+            json=payload
+        )
+        if response.ok:
+            return f"[OK] {token[:10]}... sent"
+        else:
+            return f"[ERROR] {token[:10]}... {response.status_code}"
+    except Exception as e:
+        return f"[EXCEPTION] {token[:10]}... {e}"
 
-    <label for="channelId">Channel IDs (one per line):</label>
-    <textarea id="channelId" rows="3" placeholder="チャンネルIDを改行で入力"></textarea>
+def spam_loop(tokens, channel_ids, base_message, user_ids, mention_count, interval_ms, use_random_only, stop_event, log_fn):
+    while not stop_event.is_set():
+        for token in tokens:
+            if stop_event.is_set():
+                break
+            channel_id = random.choice(channel_ids)
+            mentions = random.sample(user_ids, min(mention_count, len(user_ids))) if user_ids and mention_count > 0 else []
+            msg = send_message(token, channel_id, base_message, mentions, use_random_only)
+            log_fn(msg)
+        time.sleep(interval_ms / 1000.0)
 
-    <label for="userIds">User IDs :</label>
-    <textarea id="userIds" rows="3" placeholder="ユーザーidを改行で入力"></textarea>
+st.set_page_config(page_title="HRVXRaider", page_icon="💥")
+st.title("HRVXRaider (Streamlit)")
 
-    <label for="message">Message:</label>
-    <textarea id="message" rows="4" placeholder="HRVX ON TOP"></textarea>
+tokens_input = st.text_area("Tokens (one per line)")
+channel_ids_input = st.text_area("Channel IDs (one per line)")
+user_ids_input = st.text_area("User IDs (one per line, optional)")
+mention_count = st.number_input("How many users to mention", min_value=0, step=1, value=1)
+base_message = st.text_input("Message")
+interval = st.number_input("Interval (ms)", min_value=100, value=1000)
+use_random_only = st.checkbox("Use fully random message")
 
-    <label for="interval">Interval (ms):</label>
-    <input type="number" id="interval" min="100" value="1000" />
+# Prep values
+tokens = [x.strip() for x in tokens_input.splitlines() if x.strip()]
+channel_ids = [x.strip() for x in channel_ids_input.splitlines() if x.strip()]
+user_ids = [x.strip() for x in user_ids_input.splitlines() if x.strip()]
 
-    <label>
-      <input type="checkbox" id="randomSuffixToggle" /> Use fully random message
-    </label>
+if "running" not in st.session_state:
+    st.session_state.running = False
+    st.session_state.stop_event = threading.Event()
+    st.session_state.logs = []
 
-    <button onclick="startSending()">Start</button>
-    <button onclick="stopSending()">Stop</button>
+def log_fn(msg):
+    timestamp = time.strftime("%H:%M:%S")
+    st.session_state.logs.append(f"[{timestamp}] {msg}")
+    st.session_state.logs = st.session_state.logs[-300:]
 
-    <div class="log" id="logs"></div>
-  </div>
+col1, col2 = st.columns(2)
+with col1:
+    if not st.session_state.running and st.button("Start"):
+        if not tokens or not channel_ids or (not base_message and not use_random_only):
+            st.warning("Missing required input fields.")
+        else:
+            st.session_state.stop_event.clear()
+            threading.Thread(
+                target=spam_loop,
+                args=(tokens, channel_ids, base_message, user_ids, mention_count, interval, use_random_only, st.session_state.stop_event, log_fn),
+                daemon=True
+            ).start()
+            st.session_state.running = True
+            log_fn("Started spamming...")
+with col2:
+    if st.session_state.running and st.button("Stop"):
+        st.session_state.stop_event.set()
+        st.session_state.running = False
+        log_fn("Stopped.")
 
-  <script>
-    let sendIntervalId = null;
+st.subheader("Logs")
+st.code("\n".join(st.session_state.logs[-25:]), language="text")
 
-    function log(message, success = false) {
-      const logs = document.getElementById('logs');
-      const time = new Date().toLocaleTimeString();
-      const line = document.createElement('div');
-      line.textContent = `[${time}] ${message}`;
-      line.style.color = success ? '#facc15' : '#fecaca';
-      logs.appendChild(line);
-      logs.scrollTop = logs.scrollHeight;
-    }
-
-    function generateRandomString(length = 12) {
-      const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-    }
-
-    async function sendMessage(token, channelId, baseMessage, mentionId = null, useRandomOnly = false) {
-      const random = generateRandomString();
-      const content = useRandomOnly
-        ? random
-        : (mentionId ? `<@${mentionId}> ` : '') + baseMessage + ' ' + random;
-
-      try {
-        const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
-          method: 'POST',
-          headers: {
-            'Authorization': token,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ content })
-        });
-        if (response.ok) {
-          const data = await response.json();
-          log(`Token: ${token.slice(0, 10)}... Sent! ID: ${data.id}`, true);
-        } else {
-          const res = await response.json();
-          log(`Token: ${token.slice(0, 10)}... Error: ${res.message || response.status}`);
-        }
-      } catch (e) {
-        log(`Token: ${token.slice(0, 10)}... Network error: ${e.message}`);
-      }
-    }
-
-    async function joinServer() {
-      const tokens = document.getElementById('tokens').value.trim().split(/\n+/).filter(t => t);
-      const inviteUrl = document.getElementById('inviteLink').value.trim();
-      if (!inviteUrl.includes('discord.gg/')) {
-        alert('Please enter a valid invite link.');
-        return;
-      }
-      const inviteCode = inviteUrl.split('/').pop();
-      for (const token of tokens) {
-        try {
-          const response = await fetch(`https://discord.com/api/v9/invites/${inviteCode}`, {
-            method: 'POST',
-            headers: {
-              'Authorization': token,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-          });
-          if (response.ok) {
-            log(`Token: ${token.slice(0, 10)}... joined the server.`, true);
-          } else {
-            const res = await response.json();
-            log(`Token: ${token.slice(0, 10)}... join failed: ${res.message || response.status}`);
-          }
-        } catch (e) {
-          log(`Token: ${token.slice(0, 10)}... join error: ${e.message}`);
-        }
-      }
-    }
-
-    function startSending() {
-      const tokens = document.getElementById('tokens').value.trim().split(/\n+/).filter(t => t);
-      const channelIds = document.getElementById('channelId').value.trim().split(/\n+/).filter(x => x);
-      const userIdsRaw = document.getElementById('userIds').value.trim();
-      const userIds = userIdsRaw ? userIdsRaw.split(/\n+/).filter(x => x) : [];
-      const baseMessage = document.getElementById('message').value;
-      const interval = parseInt(document.getElementById('interval').value);
-      const useRandomOnly = document.getElementById('randomSuffixToggle').checked;
-
-      if (!tokens.length || !channelIds.length || (!baseMessage && !useRandomOnly) || isNaN(interval) || interval < 100) {
-        alert('Please fill out all required fields.');
-        return;
-      }
-
-      if (sendIntervalId !== null) {
-        clearInterval(sendIntervalId);
-      }
-
-      sendIntervalId = setInterval(() => {
-        tokens.forEach(token => {
-          const channelId = channelIds[Math.floor(Math.random() * channelIds.length)];
-          const mentionId = userIds.length ? userIds[Math.floor(Math.random() * userIds.length)] : null;
-          sendMessage(token, channelId, baseMessage, mentionId, useRandomOnly);
-        });
-      }, interval);
-
-      log('Started sending...');
-    }
-
-    function stopSending() {
-      if (sendIntervalId !== null) {
-        clearInterval(sendIntervalId);
-        sendIntervalId = null;
-        log('Stopped sending.');
-      }
-    }
-  </script>
-</body>
-</html>
 
 
