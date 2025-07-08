@@ -97,20 +97,25 @@
   <h1>HRVXRaider</h1>
   <div class="container">
     <label for="tokens">Tokens (one per line):</label>
-    <textarea id="tokens" rows="5" placeholder="Token1\nToken2\nToken3..."></textarea>
+    <textarea id="tokens" rows="5" placeholder="TOKENを改行で入力"></textarea>
 
     <label for="inviteLink">Invite link (optional):</label>
-    <input type="text" id="inviteLink" placeholder="https://discord.gg/abc123" />
+    <input type="text" id="inviteLink" placeholder="https://discord.gg/" />
     <button onclick="joinServer()">Join Server</button>
+    
+<div style="margin-top: 0.5rem;">
+  <label for="serverId" style="margin-bottom: 0.25rem; display: block;">Server ID (optional):</label>
+  <input type="text" id="serverId" placeholder="サーバーIDを入力" style="margin-top: 0; margin-bottom: 0.25rem; padding: 0.5rem; border-radius: 4px; border: 2px solid #ff0000; background-color: #000000; color: #f1f5f9; font-family: 'Inter', sans-serif; width: 100%;" />
+</div>
 
     <label for="channelId">Channel IDs (one per line):</label>
-    <textarea id="channelId" rows="3" placeholder="123...\n456...\n789..."></textarea>
+    <textarea id="channelId" rows="3" placeholder="チャンネルIDを改行で入力"></textarea>
 
-    <label for="userIds">User IDs (one per line, optional):</label>
-    <textarea id="userIds" rows="3" placeholder="Optional: 123...\n456...\n789..."></textarea>
+    <label for="userIds">User IDs :</label>
+    <textarea id="userIds" rows="3" placeholder="ユーザーidを改行で入力"></textarea>
 
     <label for="message">Message:</label>
-    <textarea id="message" rows="4" placeholder="Hello, world!"></textarea>
+    <textarea id="message" rows="4" placeholder="HRVX ON TOP"></textarea>
 
     <label for="interval">Interval (ms):</label>
     <input type="number" id="interval" min="100" value="1000" />
@@ -239,6 +244,4 @@
   </script>
 </body>
 </html>
-
-
 
