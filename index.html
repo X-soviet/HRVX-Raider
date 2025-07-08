@@ -148,32 +148,33 @@
       return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
     }
 
-    async function sendMessage(token, channelId, baseMessage, mentionId = null, useRandomOnly = false) {
-      const random = generateRandomString();
-      const content = useRandomOnly
-        ? random
-        : (mentionId ? `<@${mentionId}> ` : '') + baseMessage + ' ' + random;
+async function sendMessage(token, channelId, baseMessage, mentionId = null, useRandomOnly = false) {
+  const random = generateRandomString();
+  const content = useRandomOnly
+    ? `${baseMessage} ${random}`
+    : baseMessage;
 
-      try {
-        const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
-          method: 'POST',
-          headers: {
-            'Authorization': token,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ content })
-        });
-        if (response.ok) {
-          const data = await response.json();
-          log(`Token: ${token.slice(0, 10)}... Sent! ID: ${data.id}`, true);
-        } else {
-          const res = await response.json();
-          log(`Token: ${token.slice(0, 10)}... Error: ${res.message || response.status}`);
-        }
-      } catch (e) {
-        log(`Token: ${token.slice(0, 10)}... Network error: ${e.message}`);
-      }
+  try {
+    const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
+      method: 'POST',
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ content })
+    });
+    if (response.ok) {
+      const data = await response.json();
+      log(`Token: ${token.slice(0, 10)}... Sent! ID: ${data.id}`, true);
+    } else {
+      const res = await response.json();
+      log(`Token: ${token.slice(0, 10)}... Error: ${res.message || response.status}`);
     }
+  } catch (e) {
+    log(`Token: ${token.slice(0, 10)}... Network error: ${e.message}`);
+  }
+}
+
 
     async function joinServer() {
       const tokens = document.getElementById('tokens').value.trim().split(/\n+/).filter(t => t);
