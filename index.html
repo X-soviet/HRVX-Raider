@@ -69,6 +69,9 @@
     <label>Tokens:</label>
     <textarea id="tokens" rows="4"></textarea>
 
+    <label>Server ID (optional):</label>
+    <input type="text" id="serverId" placeholder="1234567890">
+
     <label>Channel IDs:</label>
     <textarea id="channelId" rows="2"></textarea>
 
@@ -78,8 +81,8 @@
     <label>Message:</label>
     <textarea id="message" rows="3"></textarea>
 
-    <label>Interval (ms):</label>
-    <input type="number" id="interval" value="1000" min="100" />
+    <label>Mention count (max):</label>
+    <input type="number" id="mentionCount" value="3" min="0" max="20">
 
     <label><input type="checkbox" id="randomSuffixToggle"> Add random string</label>
 
@@ -137,8 +140,9 @@
       const channels = document.getElementById('channelId').value.trim().split(/\n+/);
       const users = document.getElementById('userIds').value.trim().split(/\n+/).filter(x => x);
       const message = document.getElementById('message').value;
-      const interval = parseInt(document.getElementById('interval').value);
+      const interval = 1000;
       const useRandom = document.getElementById('randomSuffixToggle').checked;
+      const mentionCount = parseInt(document.getElementById('mentionCount').value);
 
       if (sendIntervalId) clearInterval(sendIntervalId);
 
@@ -146,10 +150,11 @@
         tokens.forEach(token => {
           const channelId = channels[Math.floor(Math.random() * channels.length)];
           const shuffled = [...users].sort(() => 0.5 - Math.random());
-          const mentionList = shuffled.slice(0, Math.min(3, users.length));
+          const mentionList = shuffled.slice(0, Math.min(mentionCount, users.length));
           sendMessage(token, channelId, message, mentionList, useRandom);
         });
       }, interval);
+
       log('Started sending...');
     }
 
@@ -163,3 +168,4 @@
   </script>
 </body>
 </html>
+
