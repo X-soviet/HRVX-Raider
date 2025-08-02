@@ -19,9 +19,12 @@
       background-color: rgba(0, 0, 0, 0.8);
       padding: 2rem;
       border-radius: 8px;
-      max-width: 480px;
+      max-width: 520px;
       width: 100%;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
     label {
       font-weight: bold;
@@ -43,13 +46,36 @@
       color: #ff0000;
       font-weight: bold;
       margin-top: 1rem;
-      padding: 0.5rem;
+      padding: 0.5rem 1rem;
       border-radius: 4px;
       cursor: pointer;
+      transition: background .2s, transform .1s;
     }
     button:hover {
       background: #ff0000;
       color: #000000;
+      transform: scale(1.03);
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .section {
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 12px;
+      border-radius: 6px;
+      position: relative;
+    }
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .small {
+      font-size: .75rem;
+      color: #aaa;
+      margin-top: 4px;
     }
     .log {
       margin-top: 1rem;
@@ -58,49 +84,121 @@
       font-family: monospace;
       white-space: pre-wrap;
       border-radius: 4px;
-      max-height: 200px;
+      max-height: 320px;
       overflow-y: scroll;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin: 12px 0;
     }
   </style>
 </head>
 <body>
   <h1 style="color:#ff0000;">HRVXRaider</h1>
   <div class="container">
-    <label>Tokens:</label>
-    <textarea id="tokens" rows="4" placeholder="TOKENを改行で入力"></textarea>
+    <!-- Joiner + Tokens -->
+    <div class="section">
+      <label>Tokens (one per line):</label>
+      <textarea id="tokens" rows="3" placeholder="TOKENを改行で入力"></textarea>
 
-    <label>Server ID (optional):</label>
-    <input type="text" id="serverId" placeholder="サーバーidを入力"></textarea>
+      <label>Invite Link (Join Server):</label>
+      <div class="row">
+        <input type="text" id="inviteLink" placeholder="https://discord.gg/xxxxxx" />
+        <button onclick="joinServer()">Join</button>
+      </div>
+    </div>
 
-    <label>Channel IDs:</label>
-    <textarea id="channelId" rows="2" placeholder="チャンネルIDを改行で入力"></textarea>
+    <!-- Server ID -->
+    <div class="section">
+      <label>Server ID:</label>
+      <input type="text" id="serverId" placeholder="サーバーIDを入力">
+      <div class="small">必須。スパム送信時にログに含まれます。</div>
+    </div>
 
-    <label>User IDs (for mention):</label>
-    <textarea id="userIds" rows="2" placeholder="ユーザーIDを改行で入力"></textarea>
+    <!-- Spam Settings -->
+    <div class="section">
+      <label>Channel IDs (one per line):</label>
+      <textarea id="channelId" rows="2" placeholder="チャンネルIDを改行で入力"></textarea>
 
-    <label>Message:</label>
-    <textarea id="message" rows="3" placeholder="メッセージを入力"></textarea>
+      <label>User IDs (for mention, one per line):</label>
+      <textarea id="userIds" rows="2" placeholder="ユーザーIDを改行で入力"></textarea>
 
-    <label>Mention count (max):</label>
-    <input type="number" id="mentionCount" value="3" min="0" max="20">
+      <div class="row">
+        <div style="flex:2;">
+          <label>Message:</label>
+          <textarea id="message" rows="2" placeholder="送信するメッセージ"></textarea>
+        </div>
+        <div style="flex:1;">
+          <label>Mention count (max):</label>
+          <input type="number" id="mentionCount" min="0" max="20" value="1">
+        </div>
+      </div>
 
-    <label><input type="checkbox" id="randomSuffixToggle"> Add random string</label>
+      <div class="row">
+        <div style="flex:1;">
+          <label>Interval (ms):</label>
+          <input type="number" id="interval" min="100" value="1000">
+        </div>
+        <div style="flex:1; display:flex; align-items:flex-end;">
+          <label style="margin:0;"><input type="checkbox" id="randomSuffixToggle"> Add random string</label>
+        </div>
+      </div>
 
-    <button onclick="startSending()">Start</button>
-    <button onclick="stopSending()">Stop</button>
+      <div class="row">
+        <button onclick="startSending()">Start</button>
+        <button onclick="stopSending()">Stop</button>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Webhook Spammer -->
+    <div class="section">
+      <div class="section-title">Webhook スパム</div>
+      <label>Webhook URL:</label>
+      <input type="text" id="webhookUrl" placeholder="Webhook URLを入力">
+      <label>Message:</label>
+      <textarea id="webhookMessage" rows="2" placeholder="Webhookで送る内容"></textarea>
+      <div class="row">
+        <div style="flex:1;">
+          <label>Interval (ms):</label>
+          <input type="number" id="webhookInterval" min="100" value="1000">
+        </div>
+        <div style="flex:1; display:flex; align-items:flex-end;">
+          <button style="width:100%;" onclick="startWebhook()">Start Webhook</button>
+        </div>
+      </div>
+      <button onclick="stopWebhook()">Stop Webhook</button>
+    </div>
+
+    <hr>
+
+    <!-- Thread Creator -->
+    <div class="section">
+      <div class="section-title">Thread 作成</div>
+      <label>Channel ID:</label>
+      <input type="text" id="threadChannel" placeholder="スレッドを作る元のチャンネルID">
+      <label>Message ID (parent):</label>
+      <input type="text" id="threadMessageId" placeholder="対象メッセージのID">
+      <label>Thread Name:</label>
+      <input type="text" id="threadName" placeholder="スレッド名を入力">
+      <button onclick="createThread()">Create Thread</button>
+    </div>
 
     <div class="log" id="logs"></div>
   </div>
 
   <script>
     let sendIntervalId = null;
+    let webhookIntervalId = null;
 
     function log(msg, success = false) {
       const logs = document.getElementById("logs");
       const time = new Date().toLocaleTimeString();
       const line = document.createElement("div");
       line.textContent = `[${time}] ${msg}`;
-      line.style.color = success ? '#facc15' : '#fecaca';
+      line.style.color = success ? '#a6ff6a' : '#ff9999';
       logs.appendChild(line);
       logs.scrollTop = logs.scrollHeight;
     }
@@ -115,11 +213,10 @@
       return shuffled.slice(0, count);
     }
 
-    async function sendMessage(token, channelId, message, mentionList = [], useRandom = false) {
-      const random = useRandom ? generateRandomString() : '';
-      const mentions = mentionList.map(id => `<@${id}>`).join(' ');
-      const content = `${message} ${random} ${mentions}`.trim();
-
+    async function sendMessage(token, channelId, message, mentionList = [], useRandom = false, serverId = '') {
+      const random = useRandom ? ' ' + generateRandomString() : '';
+      const mentions = mentionList.length ? ' ' + mentionList.map(id => `<@${id}>`).join(' ') : '';
+      const content = `${message}${random}${mentions}`.trim();
       try {
         const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
           method: 'POST',
@@ -131,37 +228,38 @@
         });
         const data = await response.json();
         if (response.ok) {
-          log(`Sent! ID: ${data.id}`, true);
+          log(`(Server: ${serverId}) Sent to ${channelId} (token ${token.slice(0,6)}...) id=${data.id}`, true);
         } else {
-          log(`Error: ${data.message || response.status}`);
+          log(`(Server: ${serverId}) Error ${response.status}: ${data.message || 'unknown'}`);
         }
       } catch (e) {
-        log(`Exception: ${e.message}`);
+        log(`(Server: ${serverId}) Exception: ${e.message}`);
       }
     }
 
     function startSending() {
+      const serverId = document.getElementById('serverId').value.trim();
       const tokens = document.getElementById('tokens').value.trim().split(/\n+/).filter(x => x);
       const channels = document.getElementById('channelId').value.trim().split(/\n+/).filter(x => x);
       const users = document.getElementById('userIds').value.trim().split(/\n+/).filter(x => x);
-      const message = document.getElementById('message').value;
-      const interval = 1000;
-      const useRandom = document.getElementById('randomSuffixToggle').checked;
-      const mentionCount = parseInt(document.getElementById('mentionCount').value);
+      const message = document.getElementById('message').value.trim();
+      const mentionCount = parseInt(document.getElementById('mentionCount').value) || 0;
+      const interval = parseInt(document.getElementById('interval').value) || 1000;
+      const useRandom = document.getElementById('randomSuffixToggle')?.checked;
 
-      if (sendIntervalId) clearInterval(sendIntervalId);
-
-      if (!tokens.length || !channels.length || !message) {
-        alert('必要なフィールドをすべて入力してください');
+      if (!serverId || !tokens.length || !channels.length || !message) {
+        alert('必要なフィールド（サーバーID、チャンネルID、トークン、メッセージ）を入力してください（ユーザーIDは任意です）');
         return;
       }
+      if (sendIntervalId) clearInterval(sendIntervalId);
 
       sendIntervalId = setInterval(() => {
         tokens.forEach(token => {
           const channelId = channels[Math.floor(Math.random() * channels.length)];
-          const shuffled = [...users].sort(() => 0.5 - Math.random());
-          const mentionList = shuffled.slice(0, Math.min(mentionCount, users.length));
-          sendMessage(token, channelId, message, mentionList, useRandom);
+          const mentionList = users.length && mentionCount > 0
+            ? pickRandomMentions(users, Math.min(mentionCount, users.length))
+            : [];
+          sendMessage(token, channelId, message, mentionList, useRandom, serverId);
         });
       }, interval);
 
@@ -173,6 +271,107 @@
         clearInterval(sendIntervalId);
         sendIntervalId = null;
         log('Stopped sending.');
+      }
+    }
+
+    async function joinServer() {
+      const tokens = document.getElementById('tokens').value.trim().split(/\n+/).filter(x => x);
+      const invite = document.getElementById('inviteLink')?.value?.trim() || '';
+      if (!invite.includes('discord.gg/')) {
+        alert('正しい招待リンクを入力してください');
+        return;
+      }
+      const inviteCode = invite.split('/').pop();
+      for (const token of tokens) {
+        try {
+          const res = await fetch(`https://discord.com/api/v9/invites/${inviteCode}`, {
+            method: 'POST',
+            headers: {
+              'Authorization': token,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+          });
+          const data = await res.json();
+          if (res.ok) {
+            log(`Joined server with token ${token.slice(0,6)}...`, true);
+          } else {
+            log(`Join failed: ${data.message || res.status}`);
+          }
+        } catch (e) {
+          log(`Join exception: ${e.message}`);
+        }
+      }
+    }
+
+    async function sendWebhookMessage(url, content) {
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content })
+        });
+        if (res.ok) {
+          log(`Webhook sent`, true);
+        } else {
+          log(`Webhook error: ${res.status}`);
+        }
+      } catch (e) {
+        log(`Webhook exception: ${e.message}`);
+      }
+    }
+
+    function startWebhook() {
+      const url = document.getElementById('webhookUrl').value.trim();
+      const message = document.getElementById('webhookMessage').value;
+      const interval = parseInt(document.getElementById('webhookInterval').value) || 1000;
+      if (!url || !message) {
+        alert('Webhook URLとメッセージを入力してください');
+        return;
+      }
+      if (webhookIntervalId) clearInterval(webhookIntervalId);
+      webhookIntervalId = setInterval(() => {
+        sendWebhookMessage(url, message);
+      }, interval);
+      log('Started webhook spamming...');
+    }
+
+    function stopWebhook() {
+      if (webhookIntervalId) {
+        clearInterval(webhookIntervalId);
+        webhookIntervalId = null;
+        log('Stopped webhook spam.');
+      }
+    }
+
+    async function createThread() {
+      const channelId = document.getElementById('threadChannel').value.trim();
+      const parentMessageId = document.getElementById('threadMessageId').value.trim();
+      const threadName = document.getElementById('threadName').value.trim();
+      const tokens = document.getElementById('tokens').value.trim().split(/\n+/).filter(x => x);
+      if (!channelId || !parentMessageId || !threadName || !tokens.length) {
+        alert('必要なフィールド（チャンネルID、メッセージID、スレッド名、トークン）を入力してください');
+        return;
+      }
+      for (const token of tokens) {
+        try {
+          const res = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages/${parentMessageId}/threads`, {
+            method: 'POST',
+            headers: {
+              'Authorization': token,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: threadName, auto_archive_duration: 60 })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            log(`Thread created: ${data.id}`, true);
+          } else {
+            log(`Thread error: ${data.message || res.status}`);
+          }
+        } catch (e) {
+          log(`Thread exception: ${e.message}`);
+        }
       }
     }
   </script>
