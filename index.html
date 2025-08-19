@@ -6,97 +6,124 @@
   <title>HRVX Raider</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
- body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #1f1f1f, #000);
-      color: #f1f5f9;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-    }
-    header {
-      width: 100%;
-      text-align: center;
-      background: #ff0000;
-      color: #000;
-      font-size: 2.5rem;
-      font-weight: 800;
-      padding: 1rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    }
-    .discord-button {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background-color: #ef4444;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 0.9rem;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    }
-    .discord-button:hover {
-      background-color: #dc2626;
-    }
-    .container {
-      background-color: #111;
-      padding: 2rem;
-      border-radius: 8px;
-      max-width: 480px;
-      width: 100%;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    }
-    label {
-      font-weight: bold;
-      margin-top: 1rem;
-      display: block;
-    }
-    input, textarea {
-      width: 100%;
-      margin-top: 0.25rem;
-      padding: 0.5rem;
-      border-radius: 4px;
-      border: 2px solid #ff0000;
-      background-color: #000000;
-      color: #f1f5f9;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    input:focus, textarea:focus {
-      border-color: #ff0000;
-      box-shadow: 0 0 5px #ff0000;
-    }
-    input::placeholder, textarea::placeholder {
-      color: #777;
-    }
-    button {
-      background: #ff0000;
-      border: none;
-      color: #000;
-      font-weight: bold;
-      margin-top: 1rem;
-      padding: 0.5rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    button:hover {
-      transform: scale(1.05);
-    }
-    .log {
-      margin-top: 1rem;
-      background: #1f2937;
-      padding: 1rem;
-      font-family: monospace;
-      white-space: pre-wrap;
-      border-radius: 4px;
-      max-height: 200px;
-      overflow-y: scroll;
-    }
-  
+body {
+  font-family: 'Inter', system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  background: linear-gradient(135deg,#1f1f1f,#000);
+  color: #f1f5f9;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+header {
+  color: #ff0000;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.discord-button {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  background-color: #ef4444;
+  color: #fff;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  z-index: 10;
+  border: none;
+  display: inline-block;
+}
+
+.discord-button:hover { background-color: #dc2626; }
+
+.container {
+  background-color: #0f0f14;
+  padding: 1.5rem 1.75rem;
+  border-radius: 10px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 2px solid #ff0000;
+  background: #0b0b11;
+  color: #f1f5f9;
+  font-size: 0.95rem;
+  resize: vertical;
+  box-sizing: border-box;
+  transition: border-color .25s, box-shadow .25s;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #ff6666;
+  box-shadow: 0 0 8px rgba(255,102,102,0.6);
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.row > div {
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn {
+  background: #ff0000;
+  border: none;
+  color: #000;
+  font-weight: 700;
+  padding: 0.65rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: transform .15s, filter .15s;
+}
+
+.btn:hover {
+  transform: scale(1.03);
+  filter: brightness(1.1);
+}
+
+.log {
+  margin-top: 8px;
+  background: #1f2330;
+  padding: 12px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  border-radius: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
 @media (max-width: 600px) {
   .container { padding: 1rem; }
   header { font-size: 1.8rem; }
@@ -122,7 +149,7 @@
     <!-- Step 3: Spam settings -->
     <label>Server ID (optional):</label>
     <input type="text" id="serverId" placeholder="サーバーIDを入力">
-    
+    <label>Channel ID :</label>
     <textarea id="channelId" rows="2" placeholder="チャンネルIDを改行で入力"></textarea>
 
     <label>User IDs (for mention, one per line)</label>
