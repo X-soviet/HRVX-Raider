@@ -3,191 +3,182 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HRVXRaider</title>
+  <title>HRVX Raider</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #000000;
-      color: #f1f5f9;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-    }
-    .container {
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 2rem;
-      border-radius: 8px;
-      max-width: 520px;
-      width: 100%;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    label {
-      font-weight: bold;
-      margin-top: 1rem;
-      display: block;
-    }
-    input, textarea {
-      width: 100%;
-      margin-top: 0.25rem;
-      padding: 0.5rem;
-      border-radius: 4px;
-      border: 2px solid #ff0000;
-      background-color: #000000;
-      color: #f1f5f9;
-    }
-    button {
-      background: transparent;
-      border: 2px solid #ff0000;
-      color: #ff0000;
-      font-weight: bold;
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background .2s, transform .1s;
-    }
-    button:hover {
-      background: #ff0000;
-      color: #000000;
-      transform: scale(1.03);
-    }
-    .row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .section {
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 12px;
-      border-radius: 6px;
-      position: relative;
-    }
-    .section-title {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-    .small {
-      font-size: .75rem;
-      color: #aaa;
-      margin-top: 4px;
-    }
-    .log {
-      margin-top: 1rem;
-      background: #1f2937;
-      padding: 1rem;
-      font-family: monospace;
-      white-space: pre-wrap;
-      border-radius: 4px;
-      max-height: 320px;
-      overflow-y: scroll;
-    }
-    hr {
-      border: none;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      margin: 12px 0;
-    }
+body {
+  font-family: 'Inter', system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  background: linear-gradient(135deg,#1f1f1f,#000);
+  color: #f1f5f9;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+header {
+  color: #ff0000;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.discord-button {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  background-color: #ef4444;
+  color: #fff;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  z-index: 10;
+  border: none;
+  display: inline-block;
+}
+
+.discord-button:hover { background-color: #dc2626; }
+
+.container {
+  background-color: #0f0f14;
+  padding: 1.5rem 1.75rem;
+  border-radius: 10px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 2px solid #ff0000;
+  background: #0b0b11;
+  color: #f1f5f9;
+  font-size: 0.95rem;
+  resize: vertical;
+  box-sizing: border-box;
+  transition: border-color .25s, box-shadow .25s;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #ff6666;
+  box-shadow: 0 0 8px rgba(255,102,102,0.6);
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.row > div {
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn {
+  background: #ff0000;
+  border: none;
+  color: #000;
+  font-weight: 700;
+  padding: 0.65rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: transform .15s, filter .15s;
+}
+
+.btn:hover {
+  transform: scale(1.03);
+  filter: brightness(1.1);
+}
+
+.log {
+  margin-top: 8px;
+  background: #1f2330;
+  padding: 12px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  border-radius: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 600px) {
+  .container { padding: 1rem; }
+  header { font-size: 1.8rem; }
+  .row { flex-direction: column; }
+}
+
+    .small { font-size: .85rem; color: #ccc; }
   </style>
 </head>
 <body>
-  <h1 style="color:#ff0000;">HRVXRaider</h1>
+  <a href="https://discord.gg/QH4t5rSvXP" class="discord-button" target="_blank">Join Discord</a>
+  <header>HRVX Raider</header>
   <div class="container">
-    <!-- Joiner + Tokens -->
-    <div class="section">
-      <div class="section-title">Step 1: トークン & 招待リンク</div>
-      <label>Tokens (one per line):</label>
-      <textarea id="tokens" rows="3" placeholder="TOKENを改行で入力"></textarea>
+    <!-- Step 1: Tokens -->
+    <textarea id="tokens" rows="4" placeholder="TOKENを改行で入力"></textarea>
 
-      <label>Invite Link (Join Server):</label>
-      <div class="row">
-        <input type="text" id="inviteLink" placeholder="https://discord.gg/xxxxxx" />
-        <button onclick="joinServer()">Join</button>
-      </div>
-      <div class="small">テストサーバー向け。CAPTCHA や制限で失敗することがあります。</div>
+    <!-- Step 2: Invite Joiner -->
+    <div class="row">
+      <input type="text" id="inviteLink" placeholder="https://discord.gg/xxxxxx" />
+      <button class="btn" onclick="joinServer()">Join Server</button>
     </div>
 
-    <!-- Server ID -->
-    <div class="section">
-      <div class="section-title">Step 1.5: サーバーID（必須）</div>
-      <label>Server ID:</label>
-      <input type="text" id="serverId" placeholder="サーバーIDを入力">
-      <div class="small">必須。スパム送信時にログに含まれます。</div>
-    </div>
+    <!-- Step 3: Spam settings -->
+    <label>Server ID (optional):</label>
+    <input type="text" id="serverId" placeholder="サーバーIDを入力">
+    <label>Channel ID :</label>
+    <textarea id="channelId" rows="2" placeholder="チャンネルIDを改行で入力"></textarea>
 
-    <!-- Spam Settings -->
-    <div class="section">
-      <div class="section-title">Step 2: メッセージスパム設定</div>
-      <label>Channel IDs (one per line):</label>
-      <textarea id="channelId" rows="2" placeholder="チャンネルIDを改行で入力"></textarea>
+    <label>User IDs (for mention, one per line)</label>
+    <textarea id="userIds" rows="2" placeholder="ユーザーIDを改行で入力"></textarea>
 
-      <label>User IDs (for mention, one per line):</label>
-      <textarea id="userIds" rows="2" placeholder="ユーザーIDを改行で入力"></textarea>
-
-      <div class="row">
-        <div style="flex:2;">
-          <label>Message:</label>
-          <textarea id="message" rows="2" placeholder="送信するメッセージ"></textarea>
-        </div>
-        <div style="flex:1;">
-          <label>Mention count (max):</label>
-          <input type="number" id="mentionCount" min="0" max="20" value="1">
-        </div>
+    <div class="row">
+      <div style="flex:1;">
+        <label>Message</label>
+        <textarea id="message" rows="2" placeholder="送信するメッセージ"></textarea>
       </div>
-
-      <div class="row">
-        <div style="flex:1;">
-          <label>Interval (ms):</label>
-          <input type="number" id="interval" min="100" value="1000">
-        </div>
-        <div style="flex:1; display:flex; align-items:flex-end;">
-          <label style="margin:0;"><input type="checkbox" id="randomSuffixToggle"> Add random string</label>
-        </div>
-      </div>
-
-      <div class="row">
-        <button onclick="startSending()">Start</button>
-        <button onclick="stopSending()">Stop</button>
+      <div style="flex:1;">
+        <label>Mention count</label>
+        <input type="number" id="mentionCount" min="0" value="1" />
       </div>
     </div>
 
-    <hr>
-
-    <!-- Webhook Spammer -->
-    <div class="section">
-      <div class="section-title">Webhook スパム</div>
-      <label>Webhook URL:</label>
-      <input type="text" id="webhookUrl" placeholder="Webhook URLを入力">
-      <label>Message:</label>
-      <textarea id="webhookMessage" rows="2" placeholder="Webhookで送る内容"></textarea>
-      <div class="row">
-        <div style="flex:1;">
-          <label>Interval (ms):</label>
-          <input type="number" id="webhookInterval" min="100" value="1000">
-        </div>
-        <div style="flex:1; display:flex; align-items:flex-end;">
-          <button style="width:100%;" onclick="startWebhook()">Start Webhook</button>
-        </div>
+    <div class="row">
+      <div style="flex:1;">
+        <label>Interval (ms)</label>
+        <input type="number" id="interval" min="100" value="1000" />
       </div>
-      <button onclick="stopWebhook()">Stop Webhook</button>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end;">
+        <label><input type="checkbox" id="randomSuffixToggle" /> Add random string</label>
+      </div>
     </div>
 
-    <hr>
-
-    <!-- Thread Creator -->
-    <div class="section">
-      <div class="section-title">Thread 作成</div>
-      <label>Channel ID:</label>
-      <input type="text" id="threadChannel" placeholder="スレッドを作る元のチャンネルID">
-      <label>Message ID (parent):</label>
-      <input type="text" id="threadMessageId" placeholder="対象メッセージのID">
-      <label>Thread Name:</label>
-      <input type="text" id="threadName" placeholder="スレッド名を入力">
-      <button onclick="createThread()">Create Thread</button>
+    <div class="row">
+      <button class="btn" onclick="startSending()">Start</button>
+      <button class="btn" onclick="stopSending()">Stop</button>
     </div>
 
     <div class="log" id="logs"></div>
@@ -195,7 +186,6 @@
 
   <script>
     let sendIntervalId = null;
-    let webhookIntervalId = null;
 
     function log(msg, success = false) {
       const logs = document.getElementById("logs");
@@ -212,15 +202,11 @@
       return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
     }
 
-    function pickRandomMentions(userIds, count) {
-      const shuffled = [...userIds].sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, count);
-    }
-
-    async function sendMessage(token, channelId, message, mentionList = [], useRandom = false, serverId = '') {
+    async function sendMessage(token, channelId, message, mentionList = [], useRandom = false) {
       const random = useRandom ? ' ' + generateRandomString() : '';
       const mentions = mentionList.length ? ' ' + mentionList.map(id => `<@${id}>`).join(' ') : '';
       const content = `${message}${random}${mentions}`.trim();
+
       try {
         const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
           method: 'POST',
@@ -232,55 +218,18 @@
         });
         const data = await response.json();
         if (response.ok) {
-          log(`(Server: ${serverId}) Sent to ${channelId} (token ${token.slice(0,6)}...) id=${data.id}`, true);
+          log(`Sent to ${channelId} (token ${token.slice(0,6)}...) id=${data.id}`, true);
         } else {
-          log(`(Server: ${serverId}) Error ${response.status}: ${data.message || 'unknown'}`);
+          log(`Error ${response.status}: ${data.message || 'unknown'}`);
         }
       } catch (e) {
-        log(`(Server: ${serverId}) Exception: ${e.message}`);
-      }
-    }
-
-    function startSending() {
-      const serverId = document.getElementById('serverId').value.trim();
-      const tokens = document.getElementById('tokens').value.trim().split(/\n+/).filter(x => x);
-      const channels = document.getElementById('channelId').value.trim().split(/\n+/).filter(x => x);
-      const users = document.getElementById('userIds').value.trim().split(/\n+/).filter(x => x);
-      const message = document.getElementById('message').value.trim();
-      const mentionCount = parseInt(document.getElementById('mentionCount').value) || 0;
-      const interval = parseInt(document.getElementById('interval').value) || 1000;
-      const useRandom = document.getElementById('randomSuffixToggle')?.checked;
-
-      if (!serverId || !tokens.length || !channels.length || !message) {
-        alert('必要なフィールド（サーバーID、チャンネルID、トークン、メッセージ）を入力してください（ユーザーIDは任意です）');
-        return;
-      }
-      if (sendIntervalId) clearInterval(sendIntervalId);
-
-      sendIntervalId = setInterval(() => {
-        tokens.forEach(token => {
-          const channelId = channels[Math.floor(Math.random() * channels.length)];
-          const mentionList = users.length && mentionCount > 0
-            ? pickRandomMentions(users, Math.min(mentionCount, users.length))
-            : [];
-          sendMessage(token, channelId, message, mentionList, useRandom, serverId);
-        });
-      }, interval);
-
-      log('Started sending...');
-    }
-
-    function stopSending() {
-      if (sendIntervalId) {
-        clearInterval(sendIntervalId);
-        sendIntervalId = null;
-        log('Stopped sending.');
+        log(`Exception: ${e.message}`);
       }
     }
 
     async function joinServer() {
       const tokens = document.getElementById('tokens').value.trim().split(/\n+/).filter(x => x);
-      const invite = document.getElementById('inviteLink')?.value?.trim() || '';
+      const invite = document.getElementById('inviteLink').value.trim();
       if (!invite.includes('discord.gg/')) {
         alert('正しい招待リンクを入力してください');
         return;
@@ -308,77 +257,46 @@
       }
     }
 
-    async function sendWebhookMessage(url, content) {
-      try {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content })
-        });
-        if (res.ok) {
-          log(`Webhook sent`, true);
-        } else {
-          log(`Webhook error: ${res.status}`);
-        }
-      } catch (e) {
-        log(`Webhook exception: ${e.message}`);
-      }
+    function pickRandomMentions(userIds, count) {
+      const shuffled = [...userIds].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, count);
     }
 
-    function startWebhook() {
-      const url = document.getElementById('webhookUrl').value.trim();
-      const message = document.getElementById('webhookMessage').value;
-      const interval = parseInt(document.getElementById('webhookInterval').value) || 1000;
-      if (!url || !message) {
-        alert('Webhook URLとメッセージを入力してください');
-        return;
-      }
-      if (webhookIntervalId) clearInterval(webhookIntervalId);
-      webhookIntervalId = setInterval(() => {
-        sendWebhookMessage(url, message);
-      }, interval);
-      log('Started webhook spamming...');
-    }
-
-    function stopWebhook() {
-      if (webhookIntervalId) {
-        clearInterval(webhookIntervalId);
-        webhookIntervalId = null;
-        log('Stopped webhook spam.');
-      }
-    }
-
-    async function createThread() {
-      const channelId = document.getElementById('threadChannel').value.trim();
-      const parentMessageId = document.getElementById('threadMessageId').value.trim();
-      const threadName = document.getElementById('threadName').value.trim();
+    function startSending() {
       const tokens = document.getElementById('tokens').value.trim().split(/\n+/).filter(x => x);
-      if (!channelId || !parentMessageId || !threadName || !tokens.length) {
-        alert('必要なフィールド（チャンネルID、メッセージID、スレッド名、トークン）を入力してください');
+      const channels = document.getElementById('channelId').value.trim().split(/\n+/).filter(x => x);
+      const users = document.getElementById('userIds').value.trim().split(/\n+/).filter(x => x);
+      const message = document.getElementById('message').value.trim();
+      const mentionCount = parseInt(document.getElementById('mentionCount').value) || 0;
+      const interval = parseInt(document.getElementById('interval').value) || 1000;
+      const useRandom = document.getElementById('randomSuffixToggle').checked;
+
+      if (!tokens.length || !channels.length || !message) {
+        alert('必要なフィールドをすべて入力してください');
         return;
       }
-      for (const token of tokens) {
-        try {
-          const res = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages/${parentMessageId}/threads`, {
-            method: 'POST',
-            headers: {
-              'Authorization': token,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name: threadName, auto_archive_duration: 60 })
-          });
-          const data = await res.json();
-          if (res.ok) {
-            log(`Thread created: ${data.id}`, true);
-          } else {
-            log(`Thread error: ${data.message || res.status}`);
-          }
-        } catch (e) {
-          log(`Thread exception: ${e.message}`);
-        }
+      if (sendIntervalId) clearInterval(sendIntervalId);
+
+      sendIntervalId = setInterval(() => {
+        tokens.forEach(token => {
+          const channelId = channels[Math.floor(Math.random() * channels.length)];
+          const mentionList = users.length && mentionCount > 0
+            ? pickRandomMentions(users, Math.min(mentionCount, users.length))
+            : [];
+          sendMessage(token, channelId, message, mentionList, useRandom);
+        });
+      }, interval);
+
+      log('Started sending...');
+    }
+
+    function stopSending() {
+      if (sendIntervalId) {
+        clearInterval(sendIntervalId);
+        sendIntervalId = null;
+        log('Stopped sending.');
       }
     }
   </script>
 </body>
 </html>
-
