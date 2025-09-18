@@ -166,9 +166,11 @@ input:focus, textarea:focus {
 <label>Interval (ms)</label>
 <input type="number" id="interval" min="100" value="1000" />
 
-<label>Add random string</label>
-<input type="checkbox" id="randomSuffixToggle" />
-        
+<div class="form-group">
+  <label for="randomSuffixToggle">Add random string</label>
+  <input type="checkbox" id="randomSuffixToggle" />
+</div>
+
 <div class="row">
   <button class="btn" onclick="startSending()">Start</button>
   <button class="btn" onclick="stopSending()">Stop</button>
