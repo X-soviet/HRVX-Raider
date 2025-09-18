@@ -130,7 +130,7 @@ input:focus, textarea:focus {
   .row { flex-direction: column; }
 }
 
-    .small { font-size: .85rem; color: #ccc; }
+.small { font-size: .85rem; color: #ccc; }
   </style>
 </head>
 <body>
@@ -171,6 +171,10 @@ input:focus, textarea:focus {
         <label>Interval (ms)</label>
         <input type="number" id="interval" min="100" value="1000" />
       </div>
+      <div style="flex:1;">
+        <label>Random string length</label>
+        <input type="number" id="randomLength" min="0" max="100" value="8" />
+      </div>
       <div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end;">
         <label><input type="checkbox" id="randomSuffixToggle" /> Add random string</label>
       </div>
@@ -203,7 +207,10 @@ input:focus, textarea:focus {
     }
 
     async function sendMessage(token, channelId, message, mentionList = [], useRandom = false) {
-      const random = useRandom ? ' ' + generateRandomString() : '';
+      let randomLength = parseInt(document.getElementById('randomLength').value) || 0;
+      if (randomLength < 0) randomLength = 0;
+      if (randomLength > 100) randomLength = 100; // 最大100文字に制限
+      const random = (useRandom && randomLength > 0) ? ' ' + generateRandomString(randomLength) : '';
       const mentions = mentionList.length ? ' ' + mentionList.map(id => `<@${id}>`).join(' ') : '';
       const content = `${message}${random}${mentions}`.trim();
 
@@ -300,3 +307,4 @@ input:focus, textarea:focus {
   </script>
 </body>
 </html>
+
